@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-class AdjectiveModel
+class AdjectiveModel extends BaseModel
 {
-    protected $table = "adjectiveModel";
+    protected $table = "adjective";
     protected $primaryKey = "id";
 }

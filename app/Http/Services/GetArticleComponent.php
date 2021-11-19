@@ -16,7 +16,7 @@ class GetArticleComponent
      * 获取形容词
      */
     public function getAdjective() {
-        return AdjectiveModel::pluck("content");
+        return AdjectiveModel::where("is_delete",0)->get();
     }
 
     /**
@@ -24,7 +24,7 @@ class GetArticleComponent
      * @return mixed
      */
     public function getModalParticle() {
-        return ModalParticleModel::pluck("content");
+        return ModalParticleModel::where("is_delete",0)->get();
     }
 
     /**
@@ -32,7 +32,7 @@ class GetArticleComponent
      * @return mixed
      */
     public function getNoun() {
-        return NounModel::pluck("content");
+        return NounModel::where("is_delete",0)->get();
     }
 
     /**
@@ -40,7 +40,7 @@ class GetArticleComponent
      * @return mixed
      */
     public function getVerb() {
-        return VerbModel::pluck("content");
+        return VerbModel::where("is_delete",0)->get();
     }
 
     /**
@@ -51,6 +51,7 @@ class GetArticleComponent
         $modalParticleList = $this->getModalParticle();
         $nounList = $this->getNoun();
         $verb = $this->getVerb();
+        dd($adjectiveList->items);
         return json_encode(compact("adjectiveList","modalParticleList","nounList","verb"));
     }
 }

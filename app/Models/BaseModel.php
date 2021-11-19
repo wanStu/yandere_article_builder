@@ -9,4 +9,5 @@ class BaseModel extends Model
     const CREATED_AT = "create_time";
     const UPDATED_AT = "update_time";
     protected $dateFormat = "U";
+    protected $fillable = ["content"];
 }

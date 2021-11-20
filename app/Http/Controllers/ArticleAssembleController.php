@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Services\Component;
 use App\Http\Services\GetArticleComponent;
 
 /**
@@ -13,6 +14,11 @@ class ArticleAssembleController
         $this->getArticleComponent = $getArticleComponent;
     }
     public function assemble() {
+        $assemble = $this->getArticleComponent->getAssemble();
+        return $assemble;
+    }
+
+    public function getComponentList() {
         $assemble = $this->getArticleComponent->getAssemble();
         return $assemble;
     }

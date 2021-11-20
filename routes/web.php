@@ -24,8 +24,20 @@ Route::get('/', function () {
 Route::get('test', [ArticleAssembleController::class,"assemble"]);
 
 Route::prefix("insert")->group(function () {
-    Route::get('adjective', [AdjectiveController::class,"insert"]);
-    Route::get('modal_particle', [ModalParticleController::class,"insert"]);
-    Route::get('noun', [NounController::class,"insert"]);
-    Route::get('verb', [VerbController::class,"insert"]);
+    Route::post('adjective', [AdjectiveController::class,"insert"]);
+    Route::post('modal_particle', [ModalParticleController::class,"insert"]);
+    Route::post('noun', [NounController::class,"insert"]);
+    Route::post('verb', [VerbController::class,"insert"]);
+});
+
+Route::prefix("get_list")->group(function () {
+    Route::post('adjective', [AdjectiveController::class,"getList"]);
+    Route::post('modal_particle', [ModalParticleController::class,"getList"]);
+    Route::post('noun', [NounController::class,"getList"]);
+    Route::post('verb', [VerbController::class,"getList"]);
+});
+
+Route::post("get_component_list",[ArticleAssembleController::class,"getComponentList"]);
+Route::get("get_csrf_token",function () {
+    return json_encode(["status" => 200,"message" => "获取成功","data" => csrf_token()],JSON_UNESCAPED_UNICODE);
 });

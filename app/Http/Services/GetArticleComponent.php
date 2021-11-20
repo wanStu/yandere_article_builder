@@ -12,46 +12,41 @@ use App\Models\VerbModel;
  */
 class GetArticleComponent
 {
-    /**
-     * 获取形容词
-     */
-    public function getAdjective() {
-        return AdjectiveModel::where("is_delete",0)->get();
-    }
 
     /**
-     * 获取语气助词
-     * @return mixed
+     * 获取单独类型的词条
+     * @param $type
+     * @return string
      */
-    public function getModalParticle() {
-        return ModalParticleModel::where("is_delete",0)->get();
+    public function getComponent($type) {
+        switch ($type) {
+            case "adjective":
+                $model = new AdjectiveModel();
+                break;
+            case "modal_particle":
+                $model = new ModalParticleModel();
+                break;
+            case "noun":
+                $model = new NounModel();
+                break;
+            case "verb":
+                $model = new VerbModel();
+                break;
+            default:
+                return "必填参数有误";
+                break;
+        }
+        $component = $model->where("is_delete",0)->select("id","content")->get();
+        return $component;
     }
-
-    /**
-     * 获取名词
-     * @return mixed
-     */
-    public function getNoun() {
-        return NounModel::where("is_delete",0)->get();
-    }
-
-    /**
-     * 获取动词
-     * @return mixed
-     */
-    public function getVerb() {
-        return VerbModel::where("is_delete",0)->get();
-    }
-
     /**
      * 返回所有文章组件
      */
     public function getAssemble() {
-        $adjectiveList = $this->getAdjective();
-        $modalParticleList = $this->getModalParticle();
-        $nounList = $this->getNoun();
-        $verb = $this->getVerb();
-        dd($adjectiveList->items);
-        return json_encode(compact("adjectiveList","modalParticleList","nounList","verb"));
+        $adjectiveList = $this->getComponent("adjective");
+        $modalParticleList = $this->getComponent("modal_particle");
+        $nounList = $this->getComponent("noun");
+        $verb = $this->getComponent("verb");
+        return compact("adjectiveList","modalParticleList","nounList","verb");
     }
 }

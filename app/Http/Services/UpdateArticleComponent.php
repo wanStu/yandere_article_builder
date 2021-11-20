@@ -16,6 +16,13 @@ class UpdateArticleComponent
     public function __construct() {
         $this->requestData = request()->all();
     }
+
+    /**
+     * 插入新词
+     * @param $type string 类型
+     * @param $contentArr array 词数组
+     * @return string
+     */
     public function insert($type,$contentArr)
     {
         switch ($type) {

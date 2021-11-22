@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('index');
 });
-Route::post('assemble', [ArticleAssembleController::class,"assemble"]);
+Route::match(["post","get"],'assemble', [ArticleAssembleController::class,"assemble"]);
 
 Route::prefix("insert")->group(function () {
     Route::post('adjective', [AdjectiveController::class,"insert"]);

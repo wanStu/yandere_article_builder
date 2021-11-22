@@ -5,6 +5,7 @@ namespace App\Http\Services;
 use App\Models\AdjectiveModel;
 use App\Models\ModalParticleModel;
 use App\Models\NounModel;
+use App\Models\PuncListModel;
 use App\Models\VerbModel;
 
 /**
@@ -16,7 +17,7 @@ class GetArticleComponent
     /**
      * 获取模型实例
      * @param $type string 类型
-     * @return AdjectiveModel|ModalParticleModel|NounModel|VerbModel
+     * @return AdjectiveModel|ModalParticleModel|NounModel|VerbModel|PuncListModel
      * @throws \Exception
      */
     protected function getModel($type) {
@@ -29,6 +30,8 @@ class GetArticleComponent
                 return new NounModel();
             case "verb":
                 return new VerbModel();
+            case "punc_list":
+                return new PuncListModel();
             default:
                 throw new \Exception("类型错误，请及时联系网站管理员");
         }
@@ -41,17 +44,19 @@ class GetArticleComponent
      */
     public function getComponent($type) {
         $model = $this->getModel($type);
-        $component = $model->where("is_delete",0)->select("id","content")->get();
+        $component = $model->where("is_delete",0)->where("content","<>","")->select("id","content")->get();
         return $component;
     }
     /**
      * 返回所有文章组件
      */
     public function getAssemble() {
-        $adjectiveList = $this->getComponent("adjective");
-        $modalParticleList = $this->getComponent("modal_particle");
-        $nounList = $this->getComponent("noun");
-        $verb = $this->getComponent("verb");
-        return compact("adjectiveList","modalParticleList","nounList","verb");
+        $adjectiveList = $this->getComponent("adjective")->pluck("content"); //形容词
+        $modalParticleList = $this->getComponent("modal_particle")->pluck("content"); //语气词
+        $nounList = $this->getComponent("noun")->pluck("content"); //名词
+        $verbList = $this->getComponent("verb")->pluck("content"); //动词
+        $puncList = $this->getComponent("punc_list")->pluck("content"); //标点
+
+        return compact("adjectiveList","modalParticleList","nounList","verbList","puncList");
     }
 }

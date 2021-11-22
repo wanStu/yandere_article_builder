@@ -17,14 +17,22 @@ class ModalParticleController implements Component
         $this->get = $getArticleComponent;
     }
     public function insert() {
-        $insertResult = $this->update->insert("modal_particle",explode(",",$this->requestData["content"]));
+        try {
+            $insertResult = $this->update->insert("modal_particle",explode(",",$this->requestData["content"]));
+        }catch (\Exception $e) {
+            return json_encode(["status" => 400,"message" => "出错","data" => $e->getMessage()],JSON_UNESCAPED_UNICODE);
+        }
         if($insertResult) {
             return json_encode(["status" => 200,"message" => "成功","data" => true],JSON_UNESCAPED_UNICODE);
         }
     }
 
     public function getList() {
-        $assemble = $this->get->getComponent("modal_particle");
-        return $assemble;
+        try {
+            $list = $this->get->getComponent("modal_particle");
+        }catch (\Exception $e) {
+            return json_encode(["status" => 400,"message" => "出错","data" => $e->getMessage()],JSON_UNESCAPED_UNICODE);
+        }
+        return $list;
     }
 }

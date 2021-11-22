@@ -18,6 +18,27 @@ class UpdateArticleComponent
     }
 
     /**
+     * 获取模型实例
+     * @param $type string 类型
+     * @return AdjectiveModel|ModalParticleModel|NounModel|VerbModel
+     * @throws \Exception
+     */
+    protected function getModel($type) {
+        switch ($type) {
+            case "adjective":
+                return new AdjectiveModel();
+            case "modal_particle":
+                return new ModalParticleModel();
+            case "noun":
+                return new NounModel();
+            case "verb":
+                return new VerbModel();
+            default:
+                throw new \Exception("类型错误，请及时联系网站管理员");
+        }
+    }
+
+    /**
      * 插入新词
      * @param $type string 类型
      * @param $contentArr array 词数组
@@ -25,23 +46,7 @@ class UpdateArticleComponent
      */
     public function insert($type,$contentArr)
     {
-        switch ($type) {
-            case "adjective":
-                $model = new AdjectiveModel();
-                break;
-            case "modal_particle":
-                $model = new ModalParticleModel();
-                break;
-            case "noun":
-                $model = new NounModel();
-                break;
-            case "verb":
-                $model = new VerbModel();
-                break;
-            default:
-                return "必填参数有误";
-                break;
-        }
+        $model = $this->getModel($type);
         $repetitionField = $model->where("is_delete",0)->whereIn("content",$contentArr)->pluck("content")->toArray();
         $data = [];
         foreach ($contentArr as $value) {
@@ -57,5 +62,10 @@ class UpdateArticleComponent
         unset($value);
         $insertResult = $model->insert($data);
         return $insertResult;
+    }
+
+    public function delete($type,$idAttr) {
+        $model = $this->getModel($type);
+        $model->where("is_delete",0)->whereIn("id",$idAttr)->save(["is_delete" => 1]);
     }
 }

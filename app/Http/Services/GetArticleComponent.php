@@ -63,7 +63,7 @@ class GetArticleComponent
         $verbList = $this->getComponent("verb")->pluck("content"); //动词
         $puncList = $this->getComponent("punc_list")->pluck("content"); //标点
         $personalPronounList = $this->getComponent("personal_pronoun")->pluck("content"); //人称代词
-        $isList = $this->getComponent("is")->pluck("content"); //是
-        return compact("adjectiveList","modalParticleList","nounList","verbList","puncList","personalPronounList","isList");
+        $auxiliaryList = $this->getComponent("auxiliary")->pluck("content"); //是
+        return compact("adjectiveList","modalParticleList","nounList","verbList","puncList","personalPronounList","auxiliaryList");
     }
 }

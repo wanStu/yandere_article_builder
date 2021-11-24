@@ -3,8 +3,10 @@
 namespace App\Http\Services;
 
 use App\Models\AdjectiveModel;
+use App\Models\AuxiliaryModel;
 use App\Models\ModalParticleModel;
 use App\Models\NounModel;
+use App\Models\PersonalPronounModel;
 use App\Models\PuncListModel;
 use App\Models\VerbModel;
 
@@ -21,7 +23,7 @@ class UpdateArticleComponent
     /**
      * 获取模型实例
      * @param $type string 类型
-     * @return AdjectiveModel|ModalParticleModel|NounModel|VerbModel|PuncListModel
+     * @return AdjectiveModel|ModalParticleModel|NounModel|VerbModel|PuncListModel|PersonalPronounModel|AuxiliaryModel
      * @throws \Exception
      */
     protected function getModel($type) {
@@ -36,6 +38,10 @@ class UpdateArticleComponent
                 return new VerbModel();
             case "punc_list":
                 return new PuncListModel();
+            case "personal_pronoun":
+                return new PersonalPronounModel();
+            case "auxiliary":
+                return new AuxiliaryModel();
             default:
                 throw new \Exception("类型错误，请及时联系网站管理员");
         }

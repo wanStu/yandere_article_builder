@@ -6,7 +6,7 @@ use App\Http\Services\Component;
 use App\Http\Services\GetArticleComponent;
 use App\Http\Services\UpdateArticleComponent;
 
-class NounController implements Component
+class PersonalPronounController implements Component
 {
     protected $update;
     protected $get;
@@ -18,7 +18,7 @@ class NounController implements Component
     }
     public function insert() {
         try {
-            $insertResult = $this->update->insert("noun",explode(",",$this->requestData["content"]));
+            $insertResult = $this->update->insert("personal_pronoun",explode(",",$this->requestData["content"]));
         }catch (\Exception $e) {
             return json_encode(["status" => 400,"message" => "出错","data" => $e->getMessage()],JSON_UNESCAPED_UNICODE);
         }
@@ -26,10 +26,9 @@ class NounController implements Component
             return json_encode(["status" => 200,"message" => "成功","data" => true],JSON_UNESCAPED_UNICODE);
         }
     }
-
     public function getList() {
         try {
-            $list = $this->get->getComponent("noun");
+            $list = $this->get->getComponent("personal_pronoun");
         }catch (\Exception $e) {
             return json_encode(["status" => 400,"message" => "出错","data" => $e->getMessage()],JSON_UNESCAPED_UNICODE);
         }

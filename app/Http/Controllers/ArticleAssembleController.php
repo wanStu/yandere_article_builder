@@ -11,67 +11,117 @@ class ArticleAssembleController
     protected $getArticleComponent;
     protected $requestParam;
     protected $common;
+    protected $articleMmodule;
+    protected $nounNum;             //名词数量
+    protected $puncNum;             //标点数量
+    protected $modalParticleNum;    //语气词数量
+    protected $adjectiveNum;        //形容词数量
+    protected $verbNum;             //名词数量
     public function __construct(GetArticleComponent $getArticleComponent,common $common) {
         $this->getArticleComponent = $getArticleComponent;
         $this->requestParam = request()->all();
         $this->common = $common;
+        $this->articleMmodule = $this->getArticleComponent->getAssemble();
+        $this->articleMmodule["is"] = [
+            "是","是","你是","我是"
+        ];
+        $this->articleMmodule["personal_pronoun"] = [
+            "I" => "我", "my" => "我的", "you" => "你","your" => "你的"
+        ];
+        $this->nounNum = rand(0,count($this->articleMmodule["nounList"]) - 1);
+        $this->puncNum = rand(0,count($this->articleMmodule["puncList"]) - 1);
+        $this->modalParticleNum = rand(0,count($this->articleMmodule["modalParticleList"]) - 1);
+        $this->adjectiveNum = rand(0,count($this->articleMmodule["adjectiveList"]) - 1);
+        $this->verbNum = rand(0,count($this->articleMmodule["verbList"]) - 1);
     }
+
+    /**
+     * @return false|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|string
+     */
     public function assemble() {
         if(empty($this->requestParam["SVO"])) {
             return $this->common->returnJson(400,"缺少主语",false);
         }
         $name = $this->requestParam["SVO"];
         $article = "";
-        $articleMmodule = $this->getArticleComponent->getAssemble();
-        $articleMmodule["you"] = [
-            "是","是","你是"
-        ];
-        $articleMmodule["me"] = [
-            "I" => "我", "my" => "我的"
-        ];
-        $adjectiveSum = count($articleMmodule["adjectiveList"]);//形容词 16
-        $modalParticleSum = count($articleMmodule["modalParticleList"]);//语气词 8
-        $nounSum = count($articleMmodule["nounList"]);//名词 36
-        $verbSum = count($articleMmodule["verbList"]);//动词 36
-        $puncSum = count($articleMmodule["puncList"]);//标点 7
-        $youSum = count($articleMmodule["you"]);//人称代词 3
-        $addNumOne = rand(3,6);                 //添加次数
-        $addNumTwo = rand(3,6);
-        $addNumThree = abs($addNumOne - $addNumTwo)?:1;
-        $nounNum = rand(0,$nounSum - 1);
-        $puncNum = rand(0,$puncSum - 1);
-        $article .= $articleMmodule["modalParticleList"][rand(0,$modalParticleSum - 1)]             //语气词
-            .$articleMmodule["puncList"][rand(0,$puncNum)]
-            .$articleMmodule["me"]["my"].$name                                                 //我的 name(对象名)
-            .$articleMmodule["puncList"][rand(0,$puncNum)]
-            .$articleMmodule["me"]["my"].$articleMmodule["nounList"][rand(0,$nounNum)]."般的".$name //我的 noun(名词) 般的  name(对象名)
-            .$articleMmodule["puncList"][rand(0,$puncNum)];
-        for(;$addNumOne--;) {
-            $nounNum = rand(0,$nounSum - 1);
-            $puncNum = rand(0,$puncSum - 1);
-            $youNum = rand(0,$youSum - 1);
-            $article .= $articleMmodule["you"][$youNum].$articleMmodule["nounList"][rand(0,$nounNum)]; // you（是，你是） noun(名词)
-            $article .= $articleMmodule["puncList"][rand(0,$puncNum)];
-            $article .= $articleMmodule["puncList"][rand(0,$puncNum)];
+        $addNounNum = rand(3,6);                                            //添加名词次数
+        $addAdjectiveNum = rand(3,6);                                       //添加形容词次数
+        $addVerbNum = abs($addNounNum - $addAdjectiveNum)?:1;       //添加动词次数，至少添加一次
+        $article = $this->insertmodalParticle($article);                          //插入语气词
+        $article = $this-$this->puncNum($article);                                //插入标点
+        $article .= $this->articleMmodule["personal_pronoun"]["my"].$name;                      //我的 name(对象名)
+        $article = $this-$this->puncNum($article);                                //插入标点
+        $article .= $this->articleMmodule["personal_pronoun"]["my"];                            //我的
+        $article = $this->insertNoun($article);                                   //插入名词
+        $article .= "般的".$name;                                                 //般的 name(对象名)
+        $article = $this-$this->puncNum($article);                                //插入标点
+        $article .= $this->articleMmodule["personal_pronoun"]["you"]."。.";        //你。.
+        for(;$addNounNum--;) {
+            //插入名词
+            $article =  $this->insertNoun($article);
         }
-         $article .= $articleMmodule["puncList"][rand(0,$puncNum)];
-        for(;$addNumTwo--;) {
-            $youNum = rand(0,$youSum - 1);
-            $puncNum = rand(0,$puncSum - 1);
-            $adjectiveNum = rand(0,$adjectiveSum -1);
-            $article .= $articleMmodule["you"][$youNum];
-            $article .= $articleMmodule["adjectiveList"][rand(0,$adjectiveNum)]; //  adjective(形容词)
-            $article .= $articleMmodule["puncList"][rand(0,$puncNum)];
+        for(;$addAdjectiveNum--;) {
+            //插入形容词
+            $article = $this->insertAdjective($article);
         }
-         $article .= $articleMmodule["puncList"][rand(0,$puncNum)];
-        for(;$addNumThree--;) {
-            $puncNum = rand(0,$puncSum - 1);
-            $verbNum = rand(0,$verbSum - 1);
-            $article .= $articleMmodule["me"]["I"].$articleMmodule["verbList"][rand(0,$verbNum)]; //  我 verb(动词)
-            $article .= $articleMmodule["puncList"][rand(0,$puncNum)];
+        for(;$addVerbNum--;) {
+            //插入动词
+            $article = $this->insertVerb($article);
         }
-         $article .= $articleMmodule["puncList"][rand(0,$puncNum)].$articleMmodule["nounList"][rand(0,$nounNum)];
         return view("article",compact("name","article"));
+    }
+
+    /**
+     * 插入名词
+     * @param $article
+     * @return string
+     */
+    protected function insertNoun($article) {
+        //随机取一个词插入
+        $article .= $this->articleMmodule["nounList"][rand(0,$this->nounNum)];
+        return $article;
+    }
+
+    /**
+     * 插入形容词
+     * @param $article
+     * @return string
+     */
+    protected function insertAdjective($article) {
+        //随机取一个词插入
+        $article .= $this->articleMmodule["adjectiveList"][rand(0,$this->adjectiveNum)];
+        return $article;
+    }
+
+    /**
+     * 插入动词
+     * @param $article
+     * @return string
+     */
+    protected function insertVerb($article) {
+        //随机取一个词插入
+        $article .= $this->articleMmodule["verbList"][rand(0,$this->verbNum)];
+        return $article;
+    }
+    /**
+     * 插入语气词
+     * @param $article
+     * @return string
+     */
+    protected function insertmodalParticle($article) {
+        //随机取一个词插入
+        $article .= $this->articleMmodule["modalParticleList"][rand(0,$this->modalParticleNum)];
+        return $article;
+    }
+    /**
+     * 插入标点
+     * @param $article
+     * @return string
+     */
+    protected function insertPunc($article) {
+        //随机取一个词插入
+        $article .= $this->articleMmodule["puncList"][rand(0,$this->puncNum)];
+        return $article;
     }
 
     public function getComponentList() {

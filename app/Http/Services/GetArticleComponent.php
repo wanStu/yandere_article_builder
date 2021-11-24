@@ -5,6 +5,7 @@ namespace App\Http\Services;
 use App\Models\AdjectiveModel;
 use App\Models\ModalParticleModel;
 use App\Models\NounModel;
+use App\Models\AuxiliaryModel;
 use App\Models\PersonalPronounModel;
 use App\Models\PuncListModel;
 use App\Models\VerbModel;
@@ -18,7 +19,7 @@ class GetArticleComponent
     /**
      * 获取模型实例
      * @param $type string 类型
-     * @return AdjectiveModel|ModalParticleModel|NounModel|VerbModel|PuncListModel|PersonalPronounModel
+     * @return AdjectiveModel|ModalParticleModel|NounModel|VerbModel|PuncListModel|AuxiliaryModel|PersonalPronounModel
      * @throws \Exception
      */
     protected function getModel($type) {
@@ -35,6 +36,8 @@ class GetArticleComponent
                 return new PuncListModel();
             case "personal_pronoun":
                 return new PersonalPronounModel();
+            case "auxiliary":
+                return new AuxiliaryModel();
             default:
                 throw new \Exception("类型错误，请及时联系网站管理员");
         }
@@ -59,7 +62,8 @@ class GetArticleComponent
         $nounList = $this->getComponent("noun")->pluck("content"); //名词
         $verbList = $this->getComponent("verb")->pluck("content"); //动词
         $puncList = $this->getComponent("punc_list")->pluck("content"); //标点
-        $personal_pronoun = $this->getComponent("personal_pronoun")->pluck("content"); //人称代词
-        return compact("adjectiveList","modalParticleList","nounList","verbList","puncList");
+        $personalPronounList = $this->getComponent("personal_pronoun")->pluck("content"); //人称代词
+        $isList = $this->getComponent("is")->pluck("content"); //是
+        return compact("adjectiveList","modalParticleList","nounList","verbList","puncList","personalPronounList","isList");
     }
 }

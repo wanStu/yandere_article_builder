@@ -33,6 +33,6 @@ class ModalParticleController implements Component
         }catch (\Exception $e) {
             return json_encode(["status" => 400,"message" => "出错","data" => $e->getMessage()],JSON_UNESCAPED_UNICODE);
         }
-        return $list;
+        return json_encode(["status" => 200,"message" => "成功","data" => $list],JSON_UNESCAPED_UNICODE);
     }
 }

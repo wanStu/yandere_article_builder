@@ -10,4 +10,5 @@ class BaseModel extends Model
     const UPDATED_AT = "update_time";
     protected $dateFormat = "U";
     protected $fillable = ["content"];
+    protected $primaryKey = "id";
 }

@@ -73,7 +73,7 @@ class ArticleAssembleController
             $article = $this->insertVerb($article);
             $article = $this->insertPunc($article);
         }
-        return view("article",compact("name","article"));
+        return view("index",compact("name","article"));
     }
 
     /**

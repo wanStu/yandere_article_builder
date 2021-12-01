@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Http\Services\GetArticleComponent;
-use App\Http\Services\common;
+use App\Http\Services\GetArticleComponentService;
+use App\Http\Services\CommonService;
 /**
  * 文章组装
  */
@@ -19,7 +19,7 @@ class ArticleAssembleController
     protected $verbSum;             //名词数量
     protected $auxiliarySum;        //助词数量
     protected $personalPronounSum;     //人称代词
-    public function __construct(GetArticleComponent $getArticleComponent,common $common) {
+    public function __construct(GetArticleComponentService $getArticleComponent, CommonService $common) {
         $this->getArticleComponent = $getArticleComponent;
         $this->requestParam = request()->all();
         $this->common = $common;
@@ -74,7 +74,6 @@ class ArticleAssembleController
             $article = $this->insertPunc($article);
         }
         return $this->common->returnJson(200,"生成完成",$article);
-        return view("index",compact("name","article"));
     }
 
     /**

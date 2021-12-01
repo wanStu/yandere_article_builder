@@ -1,7 +1,7 @@
 <?php
 use App\Http\Controllers\ComponentController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Services\common;
+use App\Http\Services\CommonService;
 /*
 |--------------------------------------------------------------------------
 | Web Routes

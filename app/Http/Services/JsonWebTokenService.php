@@ -4,7 +4,7 @@ namespace App\Http\Services;
 
 use Illuminate\Support\Facades\Cache;
 
-class JsonWebToken
+class JsonWebTokenService
 {
     const TOKEN_SALT = "#2021_";
 

@@ -2,19 +2,19 @@
 
 use App\Http\Controllers\ArticleAssembleController;
 use App\Http\Controllers\ComponentController;
-use App\Http\Controllers\Login;
+use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Services\common;
+use App\Http\Services\CommonService;
 
 
 
 //获取csrf token
-Route::get("get_csrf_token",[common::class,"getCsrfTokne"]);
+Route::get("get_csrf_token",[CommonService::class,"getCsrfTokne"]);
 //登录 login
-Route::post('/admin/login', [Login::class,"login"]);
+Route::post('/admin/login', [LoginController::class,"login"]);
 //未登录提示
 Route::match(["post","get"],'/admin/unlogin', function () {
-    return (new common())->returnJson(400,"未登录或登陆已过期",false);
+    return (new CommonService())->returnJson(400,"未登录或登陆已过期",false);
 });
 //组装文章
 Route::match(["post","get"],'assemble', [ArticleAssembleController::class,"assemble"]);

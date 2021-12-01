@@ -13,7 +13,7 @@ use App\Models\VerbModel;
 /**
  * 上传文章组件
  */
-class UpdateArticleComponent
+class UpdateArticleComponentService
 {
     protected $requestData;
     public function __construct() {

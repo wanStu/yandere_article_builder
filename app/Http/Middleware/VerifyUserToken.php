@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use App\Http\Services\common;
-use App\Http\Services\JsonWebToken;
+use App\Http\Services\CommonService;
+use App\Http\Services\JsonWebTokenService;
 use Illuminate\Support\Facades\Cache;
 use Closure;
 
@@ -11,7 +11,7 @@ class VerifyUserToken
 {
     protected $jwt;
     protected $common;
-    public function __construct(JsonWebToken $jwt,common $common) {
+    public function __construct(JsonWebTokenService $jwt, CommonService $common) {
         $this->jwt = $jwt;
         $this->common = $common;
     }

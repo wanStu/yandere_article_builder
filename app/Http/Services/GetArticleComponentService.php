@@ -13,7 +13,7 @@ use App\Models\VerbModel;
 /**
  * 获取文章各个组成部分的列表
  */
-class GetArticleComponent
+class GetArticleComponentService
 {
 
     /**

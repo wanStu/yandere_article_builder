@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Services\CommonService;
 
 
-
+Route::match(["post","get"],"/",function () {
+    return view("index");
+});
 //获取csrf token
 Route::get("get_csrf_token",[CommonService::class,"getCsrfTokne"]);
 //登录 login

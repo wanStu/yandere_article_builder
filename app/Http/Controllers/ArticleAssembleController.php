@@ -118,7 +118,7 @@ class ArticleAssembleController
         $article .= $name;
         //插入标点
         $article = $this->insertPunc($article);
-        return $this->common->returnJson(200,"生成完成",$article);
+        return $this->common->returnJson(200,$name,$article);
     }
 
 

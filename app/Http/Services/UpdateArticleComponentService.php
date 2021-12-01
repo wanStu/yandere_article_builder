@@ -73,8 +73,19 @@ class UpdateArticleComponentService
         return $insertResult;
     }
 
-    public function delete($type,$idAttr) {
+    /**
+     * 删除词
+     * @param string $type
+     * @param array $idAttr
+     * @throws \Exception
+     */
+    public function delete(string $type, array $idAttr) {
         $model = $this->getModel($type);
-        $model->where("is_delete",0)->whereIn("id",$idAttr)->save(["is_delete" => 1]);
+        $deleteResult = $model->where("is_delete",0)->whereIn("id",$idAttr)->update(["is_delete" => 1,"delete_time" => time()]);
+        if($deleteResult) {
+            return true;
+        }else {
+            return false;
+        }
     }
 }

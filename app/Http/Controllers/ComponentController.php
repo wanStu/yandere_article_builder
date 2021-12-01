@@ -61,4 +61,19 @@ class ComponentController
             return $this->common->returnJson(400,"出错",false);
         }
     }
+
+    public function delete() {
+        $data = ["type","id"];
+        $missParam = $this->common->getMissParam($this->requestData,$data);
+        if($missParam) {
+            return $this->common->returnJson(400,"有必填参数为空",false);
+        }
+        $idAttr = explode(",",$this->requestData["id"]);
+        $deleteResult = $this->update->delete($this->requestData["type"],$idAttr);
+        if($deleteResult) {
+            return $this->common->returnJson(200,"删除成功",true);
+        }else {
+            return $this->common->returnJson(400,"删除失败,可能的原因:没有这个词",false);
+        }
+    }
 }

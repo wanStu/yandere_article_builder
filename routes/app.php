@@ -29,15 +29,14 @@ Route::match(["post","get"],"register_user",[UserController::class,"addUser"]);
 //需要验证 token 的路由
 Route::middleware("VerifyUserToken")->group(function () {
 
-    //获取单个文章组成词语列表
-    Route::prefix("get_list")->group(function () {
-        Route::match(["post","get"],'Component', [ComponentController::class,"getList"]);
-    });
+    //获取文章组成词语列表
+    Route::match(["post","get"],'get_list/Component', [ComponentController::class,"getList"]);
 
     //插入文章组成词语
-    Route::prefix("insert")->group(function () {
-        Route::match(["post","get"],'Component', [ComponentController::class,"insert"]);
-    });
+    Route::match(["post","get"],'insert/Component', [ComponentController::class,"insert"]);
+
+    //删除文章组成词语
+    Route::match(["post","get"],'delete/Component', [ComponentController::class,"delete"]);
 
     //获取所有文章组成词语列表
     Route::match(["post","get"],"get_component_list",[ArticleAssembleController::class,"getComponentList"]);

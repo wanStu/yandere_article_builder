@@ -2,13 +2,8 @@
 
 namespace App\Http\Services;
 
-use App\Models\AdjectiveModel;
-use App\Models\AuxiliaryModel;
-use App\Models\ModalParticleModel;
-use App\Models\NounModel;
-use App\Models\PersonalPronounModel;
-use App\Models\PuncListModel;
-use App\Models\VerbModel;
+use App\Models\ComponentModel;
+
 
 /**
  * 上传文章组件
@@ -20,32 +15,6 @@ class UpdateArticleComponentService
         $this->requestData = request()->all();
     }
 
-    /**
-     * 获取模型实例
-     * @param $type string 类型
-     * @return AdjectiveModel|ModalParticleModel|NounModel|VerbModel|PuncListModel|PersonalPronounModel|AuxiliaryModel
-     * @throws \Exception
-     */
-    protected function getModel($type) {
-        switch ($type) {
-            case "adjective":
-                return new AdjectiveModel();
-            case "modal_particle":
-                return new ModalParticleModel();
-            case "noun":
-                return new NounModel();
-            case "verb":
-                return new VerbModel();
-            case "punc_list":
-                return new PuncListModel();
-            case "personal_pronoun":
-                return new PersonalPronounModel();
-            case "auxiliary":
-                return new AuxiliaryModel();
-            default:
-                throw new \Exception("类型错误，请及时联系网站管理员");
-        }
-    }
 
     /**
      * 插入新词
@@ -55,14 +24,15 @@ class UpdateArticleComponentService
      */
     public function insert($type,$contentArr)
     {
-        $model = $this->getModel($type);
-        $repetitionField = $model->where("is_delete",0)->whereIn("content",$contentArr)->pluck("content")->toArray();
+        $model = new ComponentModel();
+        $repetitionField = $model->where("type",$type)->where("is_delete",0)->whereIn("content",$contentArr)->pluck("content")->toArray();
         $data = [];
         foreach ($contentArr as $value) {
             if(in_array($value,(array)$repetitionField)) {
                 continue;
             }
             $data[] = [
+                "type"          => $type,
                 "content"       => $value,
                 "create_time"   => time(),
                 "update_time"   => time()
@@ -80,8 +50,8 @@ class UpdateArticleComponentService
      * @throws \Exception
      */
     public function delete(string $type, array $idAttr) {
-        $model = $this->getModel($type);
-        $deleteResult = $model->where("is_delete",0)->whereIn("id",$idAttr)->update(["is_delete" => 1,"delete_time" => time()]);
+        $model = new ComponentModel();
+        $deleteResult = $model->where("type",$type)->where("is_delete",0)->whereIn("id",$idAttr)->update(["is_delete" => 1,"delete_time" => time()]);
         if($deleteResult) {
             return true;
         }else {

@@ -13,8 +13,8 @@ class UserService
     }
     //用户登录
     public function userLogin($userName,$userPwd) {
-        $userInfo = UserModel::where("user_name",$userName)->where("user_pwd",$userPwd)->first()->toArray();
-        if([] == $userInfo) {
+        $userInfo = UserModel::where("user_name",$userName)->where("user_pwd",$userPwd)->first();
+        if(!$userInfo) {
             return false;
         }
         $token = $this->jwt->makeToken($userInfo["id"]);

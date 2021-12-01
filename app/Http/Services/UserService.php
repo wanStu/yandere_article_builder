@@ -3,7 +3,6 @@
 namespace App\Http\Services;
 
 use App\Models\UserModel;
-use Illuminate\Support\Facades\Cache;
 
 class UserService
 {
@@ -44,7 +43,7 @@ class UserService
                 [
                     "user_name"     => $userName,
                     "user_pwd"      => $userPwd,
-                    "create_time"   => microtime()
+                    "create_time"   => time()
                 ]
             );
         }
@@ -68,7 +67,7 @@ class UserService
             $editResult = $userinfo->update(
                 [
                     "user_pwd"      => $userInfo["userPwd"],
-                    "update_time"   => microtime()
+                    "update_time"   => time()
                 ]
             );
         }
@@ -90,9 +89,9 @@ class UserService
         if($userinfo) {
             $deleteResult = $userinfo->update(
                 [
-                    "update_time"   => microtime(),
+                    "update_time"   => time(),
                     "is_delete"     => 1,
-                    "delete_time"   => microtime()
+                    "delete_time"   => time()
                 ]
             );
         }

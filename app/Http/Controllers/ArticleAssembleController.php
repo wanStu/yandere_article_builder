@@ -73,6 +73,7 @@ class ArticleAssembleController
             $article = $this->insertVerb($article);
             $article = $this->insertPunc($article);
         }
+        return $this->common->returnJson(200,"生成完成",$article);
         return view("index",compact("name","article"));
     }
 

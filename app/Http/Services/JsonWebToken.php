@@ -2,6 +2,8 @@
 
 namespace App\Http\Services;
 
+use Illuminate\Support\Facades\Cache;
+
 class JsonWebToken
 {
     const TOKEN_SALT = "#2021_";
@@ -25,8 +27,7 @@ class JsonWebToken
      */
     public function delToken() {
         $token = $this->getToken();
-
-
+        Cache::tags("userLogin")->forget($token);
     }
     /**
      * 根据 userid 生成 token
@@ -38,6 +39,11 @@ class JsonWebToken
         $timeStamp = microtime(true);
         $salt = self::TOKEN_SALT;
         $token = md5("{$timeStamp}_{$userid}_{$guid}_{$salt}");
+        try {
+            Cache::tags(["userLogin"])->put($token,$userid,86400 * 3);
+        } catch (\Exception $e) {
+            return false;
+        }
         return $token;
     }
 

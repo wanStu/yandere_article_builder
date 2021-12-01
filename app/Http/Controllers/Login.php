@@ -14,11 +14,16 @@ class Login
         $this->common = $common;
         $this->userService = $userService;
     }
-    public function Login() {
+    //登录
+    public function login() {
         $loginResult = $this->userService->userLogin($this->requestData["username"],$this->requestData["userpwd"]);
         if(!$loginResult) {
             return $this->common->returnJson(400,"账号或密码错误，登陆失败",false);
         }
         return $this->common->returnJson(200,"登陆成功",$loginResult);
+    }
+    //注销登录
+    public function logout() {
+
     }
 }

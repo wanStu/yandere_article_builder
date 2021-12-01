@@ -37,6 +37,9 @@ class ArticleAssembleController
      * @return false|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|string
      */
     public function assemble() {
+        if(!$this->nounSum || !$this->puncSum || !$this->modalParticleSum || !$this->adjectiveSum || !$this->verbSum || !$this->auxiliarySum || !$this->personalPronounSum) {
+            return $this->common->returnJson(400,"系统异常，请联系管理员",false);
+        }
         if(empty($this->requestParam["SVO"])) {
             return $this->common->returnJson(400,"缺少主语",false);
         }

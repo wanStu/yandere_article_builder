@@ -28,9 +28,10 @@ class UpdateArticleComponentService
         $repetitionField = $model->where("type",$type)->where("is_delete",0)->whereIn("content",$contentArr)->pluck("content")->toArray();
         $data = [];
         foreach ($contentArr as $value) {
-            if(in_array($value,(array)$repetitionField)) {
-                continue;
-            }
+//            不录入重复的值
+//            if(in_array($value,(array)$repetitionField)) {
+//                continue;
+//            }
             $data[] = [
                 "type"          => $type,
                 "content"       => $value,

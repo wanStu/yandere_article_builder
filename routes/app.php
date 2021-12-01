@@ -20,6 +20,12 @@ Route::match(["post","get"],'/admin/unlogin', function () {
 //组装文章
 Route::match(["post","get"],'assemble', [ArticleAssembleController::class,"assemble"]);
 
+//注册用户
+Route::match(["post","get"],"register_user",[UserController::class,"addUser"]);
+//Route::match(["post","get"],"register_user",function () {
+//    return (new CommonService())->returnJson(400,"注册暂未开启",false);
+//});
+
 //需要验证 token 的路由
 Route::middleware("VerifyUserToken")->group(function () {
 

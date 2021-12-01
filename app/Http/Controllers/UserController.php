@@ -29,7 +29,7 @@ class UserController
         if($addResult) {
             return $this->common->returnJson(200,"添加成功",$addResult);
         }else {
-            return $this->common->returnJson(400,"添加失败",false);
+            return $this->common->returnJson(400,"添加失败,可能的原因：用户名已存在",false);
         }
     }
 

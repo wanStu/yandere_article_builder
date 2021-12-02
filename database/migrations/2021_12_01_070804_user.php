@@ -14,22 +14,26 @@ class User extends Migration
      */
     public function up()
     {
-        Schema::create('user', function (Blueprint $table) {
-             $table->engine = 'InnoDB';
-             $table->charset = 'utf8mb3';
-             $table->collation = 'utf8mb3_general_ci';
-            // CONTENT
-            $table->increments('id')->nullable(false)->comment('');
-			$table->string('user_name', 20)->nullable()->default(null)->comment('');
-			$table->string('user_pwd', 20)->nullable()->default(null)->comment('');
-			$table->bigInteger('create_time')->nullable()->default(null)->comment('');
-			$table->bigInteger('update_time')->nullable()->default(null)->comment('');
-			$table->integer('is_delete')->nullable()->default(0)->comment('');
-			$table->bigInteger('delete_time')->nullable()->default(null)->comment('');
-			
-        });
+        /*
+         * 当表 user 不存在时执行迁移？（待测）
+         */
+        if(!Schema::hasTable("user")) {
+            Schema::create('user', function (Blueprint $table) {
+                $table->engine = 'InnoDB';
+                $table->charset = 'utf8mb3';
+                $table->collation = 'utf8mb3_general_ci';
+                // CONTENT
+                $table->increments('id')->nullable(false)->comment('');
+                $table->string('user_name', 20)->nullable()->default(null)->comment('');
+                $table->string('user_pwd', 20)->nullable()->default(null)->comment('');
+                $table->bigInteger('create_time')->nullable()->default(null)->comment('');
+                $table->bigInteger('update_time')->nullable()->default(null)->comment('');
+                $table->integer('is_delete')->nullable()->default(0)->comment('');
+                $table->bigInteger('delete_time')->nullable()->default(null)->comment('');
+            });
+        }
 
-        
+
     }
 
     /**

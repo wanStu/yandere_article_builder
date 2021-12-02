@@ -47,18 +47,15 @@
 <div class="container" id="container">
     <h1>文章生成器</h1>
     <div class="form">
-        <form action="/assemble" method="post">
-            <?php echo csrf_field(); ?>
-            <div class="row">
-                <div class="col-12 col-sm">
-                    <label for="SVO">请输入发病对象:</label>
-                    <input type="text" class="text" placeholder="请输入发病对象" id="SVO" name="SVO" v-model="SVO">
-                </div>
-                <div class="col-12 col-sm-1">
-                    <input class="btn btn-success" type="button" value="确认" v-on:click="formSubmit">
-                </div>
+        <div class="row">
+            <div class="col-12 col-sm">
+                <label for="SVO">请输入发病对象:</label>
+                <input type="text" class="text" placeholder="请输入发病对象" id="SVO" name="SVO" v-model="SVO" @keyup.enter="formSubmit">
             </div>
-        </form>
+            <div class="col-12 col-sm-1">
+                <input class="btn btn-success" type="button" value="确认" v-on:click="formSubmit">
+            </div>
+        </div>
     </div>
         <h1>
             @{{ articleTitle }}

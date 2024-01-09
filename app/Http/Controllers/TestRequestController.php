@@ -12,7 +12,7 @@ class TestRequestController
     }
     
 
-    public function testSor() {
+    public function testSortArray() {
         $this->common->sortArrayUseKey([
             [
                 'a' => 2

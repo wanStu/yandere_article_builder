@@ -42,4 +42,22 @@ class CommonService
             return $missParam;
         }
     }
+
+
+    /**
+     * 排序方法
+     */
+    public function sortArrayUseKey(array $array, string $key, string $orderType = SORT_DESC, string $sub_key = '') {
+        $key_ary = [];
+        foreach ($array as $k => $v) {
+            if (!isset($v[$key])) {
+                return FALSE;
+            }
+            $key_ary[$k] = $v[$key];
+        }
+        array_multisort($key_ary, $orderType, $array);
+        return $array;
+    }
+
+
 }
